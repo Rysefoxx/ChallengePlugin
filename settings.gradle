@@ -1,0 +1,4 @@
+rootProject.name = 'Challenge'
+include 'Core'
+include 'Stats'
+

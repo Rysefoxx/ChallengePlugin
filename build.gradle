@@ -1,0 +1,44 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id 'java'
+}
+
+group = 'io.github.rysefoxx.parent'
+
+subprojects {
+    apply(plugin: 'java')
+
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.encoding = 'UTF-8'
+        }
+    }
+
+    buildDir {
+        delete rootProject.buildDir
+        "$rootProject.buildDir/submodules/${project.name}"
+    }
+}
+
+allprojects {
+    version '0.0.1'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+        compileOnly 'org.projectlombok:lombok:1.18.22'
+        compileOnly 'org.jetbrains:annotations:23.1.0'
+    }
+}
+
+dependencies {
+    implementation project(':Core')
+    implementation project(':Stats')
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
