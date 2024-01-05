@@ -40,7 +40,6 @@ public class TranslationLoader implements TranslationService {
     private ConnectionManager connectionManager;
     private AsyncDatabaseManager asyncDatabaseManager;
 
-
     @Override
     public void onEnable(@NotNull ChallengePlugin plugin) {
         this.plugin = plugin;
@@ -78,6 +77,16 @@ public class TranslationLoader implements TranslationService {
                 continue;
             }
             cacheTranslations(plugin, language);
+        }
+    }
+
+    /**
+     * Reload all translations.
+     */
+    public void reload() {
+        this.translations.clear();
+        for (Language value : Language.values()) {
+            cacheTranslations(plugin, value);
         }
     }
 
@@ -147,6 +156,7 @@ public class TranslationLoader implements TranslationService {
 
     /**
      * Gets the language of a player from the database. If the player does not exist, it will be saved with the default language.
+     *
      * @param uuid The uuid of the player.
      * @return The language of the player.
      */
@@ -158,7 +168,7 @@ public class TranslationLoader implements TranslationService {
                 try (PreparedStatement preparedStatement = this.connectionManager.prepareStatement(connection, "SELECT * FROM challenge.language WHERE uuid = ?")) {
                     if (preparedStatement == null) {
                         this.plugin.getLogger().severe("Failed to load language from database, because the prepared statement is null!");
-                        saveDefault(uuid);
+                        save(uuid, Language.ENGLISH);
                         future.complete(Language.ENGLISH);
                         return;
                     }
@@ -167,14 +177,14 @@ public class TranslationLoader implements TranslationService {
 
                     try (ResultSet resultSet = preparedStatement.executeQuery()) {
                         if (!resultSet.next()) {
-                            saveDefault(uuid);
+                            save(uuid, Language.ENGLISH);
                             future.complete(Language.ENGLISH);
                             return;
                         }
 
                         Language language = Language.fromName(resultSet.getString("language"));
                         if (language == null) {
-                            saveDefault(uuid);
+                            save(uuid, Language.ENGLISH);
                             future.complete(Language.ENGLISH);
                             return;
                         }
@@ -185,7 +195,7 @@ public class TranslationLoader implements TranslationService {
                 }
             } catch (SQLException e) {
                 this.plugin.getLogger().log(Level.SEVERE, "Failed to establish database connection!", e);
-                saveDefault(uuid);
+                save(uuid, Language.ENGLISH);
                 future.complete(Language.ENGLISH);
             }
         });
@@ -196,14 +206,16 @@ public class TranslationLoader implements TranslationService {
     /**
      * Saves player language to database.
      *
-     * @param uuid The uuid of the player.
+     * @param uuid     The uuid of the player.
+     * @param language The language of the player.
      */
-    private void saveDefault(@NotNull UUID uuid) {
-        this.playerLanguage.put(uuid, Language.ENGLISH);
+    public void save(@NotNull UUID uuid, @NotNull Language language) {
+        this.playerLanguage.put(uuid, language);
         this.asyncDatabaseManager.executeAsync(() -> {
             try (Connection connection = this.connectionManager.getConnection();
                  PreparedStatement preparedStatement = this.connectionManager.prepareStatement(connection,
-                         "INSERT INTO challenge.language (uuid, language) VALUES (?, ?)")) {
+                         "INSERT INTO challenge.language (uuid, language) VALUES (?, ?)" +
+                                 "ON DUPLICATE KEY UPDATE language = VALUES(language)")) {
 
                 if (preparedStatement == null) {
                     this.plugin.getLogger().severe("Failed to save language for " + uuid + " to database, because the prepared statement is null!");
@@ -211,7 +223,7 @@ public class TranslationLoader implements TranslationService {
                 }
 
                 preparedStatement.setObject(1, uuid);
-                preparedStatement.setString(2, Language.ENGLISH.toString());
+                preparedStatement.setString(2, language.toString());
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 this.plugin.getLogger().log(Level.SEVERE, "Failed to save language for " + uuid + " to database!", e);

@@ -1,8 +1,11 @@
 package io.github.rysefoxx.language.command;
 
+import io.github.rysefoxx.core.registry.ServiceRegistry;
+import io.github.rysefoxx.core.util.StringUtil;
 import io.github.rysefoxx.language.Language;
 import io.github.rysefoxx.language.MessageServiceFactory;
 import io.github.rysefoxx.language.TranslationKeyDefaults;
+import io.github.rysefoxx.language.TranslationLoader;
 import io.github.rysefoxx.language.service.MessageService;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,6 +15,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,40 +26,60 @@ import java.util.List;
 public class CommandLanguage implements CommandExecutor, TabCompleter {
 
     private final MessageService messageService;
+    private final TranslationLoader translationLoader;
 
     public CommandLanguage() {
         this.messageService = MessageServiceFactory.createMessageService();
+        this.translationLoader = ServiceRegistry.findService(TranslationLoader.class);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) return true;
 
-        /**
-         * Language <language>
-         * Language config reload
-         */
-
         if (args.length == 1) {
             Language language = Language.fromName(args[0]);
             if (language == null) {
-                this.messageService.sendTranslatedMessage(player, "invalid_language");
                 this.messageService.sendTranslatedMessage(player, "invalid_language", TranslationKeyDefaults.PREFIX, args[0]);
                 return true;
             }
 
+            if (this.translationLoader.getLanguageSync(player.getUniqueId()) == language) {
+                this.messageService.sendTranslatedMessage(player, "language_already_set", TranslationKeyDefaults.PREFIX, StringUtil.formatString(language.name()));
+                return true;
+            }
+
+            this.translationLoader.save(player.getUniqueId(), language);
+            this.messageService.sendTranslatedMessage(player, "language_set", TranslationKeyDefaults.PREFIX, StringUtil.formatString(language.name()));
             return true;
         }
 
-        if (args.length == 2) {
+        if (!sender.hasPermission("challenge.language")) return true;
+
+        if (args.length == 2 && args[0].equalsIgnoreCase("config") && args[1].equalsIgnoreCase("reload")) {
+            this.translationLoader.reload();
+            this.messageService.sendTranslatedMessage(player, "config_reload", TranslationKeyDefaults.PREFIX);
             return true;
         }
+
         return true;
     }
 
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (args.length == 1) {
+            List<String> toReturn = new ArrayList<>();
+            if (sender.hasPermission("challenge.language"))
+                toReturn.add("config");
+
+            toReturn.addAll(Arrays.stream(Language.values()).map(Language::name).map(StringUtil::formatString).toList());
+            return toReturn;
+        }
+
+        if (!sender.hasPermission("challenge.language")) return List.of();
+        if (args.length == 2) return List.of("reload");
+
         return null;
     }
 }
