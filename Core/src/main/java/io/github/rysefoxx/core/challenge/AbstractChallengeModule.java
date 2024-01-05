@@ -48,11 +48,14 @@ public abstract class AbstractChallengeModule {
      * @param trigger The player who triggered the end
      */
     public void end(@NotNull Player trigger) {
-        IMessageService service = ServiceRegistry.findService(IMessageService.class);
+        IMessageService messageService = ServiceRegistry.findService(IMessageService.class);
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.setGameMode(GameMode.SPECTATOR);
-            service.sendTranslatedMessage(player, "challenge_end", "prefix", trigger.getName());
+            messageService.sendTranslatedMessage(player, "challenge_end", "prefix", trigger.getName());
         });
+
+        ITimerService timerService = ServiceRegistry.findService(ITimerService.class);
+        timerService.pause(null);
     }
 
     /**

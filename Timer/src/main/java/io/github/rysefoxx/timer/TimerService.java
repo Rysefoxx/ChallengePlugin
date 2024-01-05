@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -63,15 +64,17 @@ public class TimerService implements ITimerService {
     }
 
     @Override
-    public void pause(@NotNull Player player) {
+    public void pause(@Nullable Player player) {
         if (!this.timer.isEnabled()) {
-            this.messageService.sendTranslatedMessage(player, "timer_already_disabled", TranslationKeyDefaults.PREFIX);
+            if (player != null)
+                this.messageService.sendTranslatedMessage(player, "timer_already_disabled", TranslationKeyDefaults.PREFIX);
             return;
         }
 
         this.timer.setEnabled(false);
         save();
-        this.messageService.sendTranslatedMessage(player, "timer_disabled", TranslationKeyDefaults.PREFIX);
+        if (player != null)
+            this.messageService.sendTranslatedMessage(player, "timer_disabled", TranslationKeyDefaults.PREFIX);
     }
 
     @Override

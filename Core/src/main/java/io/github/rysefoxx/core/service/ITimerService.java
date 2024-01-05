@@ -4,6 +4,7 @@ package io.github.rysefoxx.core.service;
 import io.github.rysefoxx.core.ChallengePlugin;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Rysefoxx
@@ -36,9 +37,9 @@ public interface ITimerService {
     /**
      * Pauses the timer.
      *
-     * @param player The player who triggered the pause.
+     * @param player The player who triggered the pause. Or null if the timer should be paused by the plugin.
      */
-    void pause(@NotNull Player player);
+    void pause(@Nullable Player player);
 
     /**
      * Sets the timer.
