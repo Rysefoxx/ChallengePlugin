@@ -3,5 +3,13 @@ authors: [ Rysefoxx ]
 version: '${project.version}'
 api-version: 1.20
 main: io.github.rysefoxx.core.ChallengePlugin
+commands:
+  language:
+  hide:
 libraries:
   - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.5.4-DEV
+  - com.mysql:mysql-connector-j:8.2.0
+  - com.zaxxer:HikariCP:5.1.0
+  - org.mariadb.jdbc:mariadb-java-client:3.3.2
+  - commons-io:commons-io:2.14.0
+  - org.json:json:20231013

@@ -1,0 +1,16 @@
+group = 'io.github.rysefoxx.database'
+
+repositories {
+    maven {
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT'
+    compileOnly 'com.mysql:mysql-connector-j:8.2.0'
+    compileOnly 'com.zaxxer:HikariCP:5.1.0'
+    compileOnly 'org.mariadb.jdbc:mariadb-java-client:3.3.2'
+    compileOnly 'commons-io:commons-io:2.14.0'
+    compileOnly project(':Core')
+}

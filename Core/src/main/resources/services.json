@@ -1,0 +1,29 @@
+{
+  "services": [
+    {
+      "name": "DatabaseService",
+      "initialization_method": "onEnable",
+      "initialization_priority": 1,
+      "implemented_classes": [
+        "io.github.rysefoxx.database.AsyncDatabaseManager",
+        "io.github.rysefoxx.database.ConnectionManager"
+      ]
+    },
+    {
+      "name": "TranslationService",
+      "initialization_method": "onEnable",
+      "initialization_priority": 2,
+      "implemented_classes": [
+        "io.github.rysefoxx.language.TranslationLoader"
+      ]
+    },
+    {
+      "name": "CommandService",
+      "initialization_method": "onEnable",
+      "initialization_priority": 3,
+      "implemented_classes": [
+        "io.github.rysefoxx.hide.CommandHide"
+      ]
+    }
+  ]
+}

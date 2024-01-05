@@ -1,4 +1,11 @@
 rootProject.name = 'Challenge'
 include 'Core'
-include 'Stats'
+include 'NoCraftingTable'
+include 'Hide'
+include 'Database'
+include 'Language'
+include 'Language:Paper'
+findProject(':Language:Paper')?.name = 'Paper'
+include 'Language:Spigot'
+findProject(':Language:Spigot')?.name = 'Spigot'
 

@@ -8,12 +8,13 @@ group = 'io.github.rysefoxx.parent'
 subprojects {
     apply(plugin: 'java')
 
-    tasks.withType(JavaCompile).tap {
-        configureEach {
-            options.encoding = 'UTF-8'
-        }
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
     }
 
+    java {
+        toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    }
     buildDir {
         delete rootProject.buildDir
         "$rootProject.buildDir/submodules/${project.name}"
@@ -36,7 +37,12 @@ allprojects {
 
 dependencies {
     implementation project(':Core')
-    implementation project(':Stats')
+    implementation project(':NoCraftingTable')
+    implementation project(':Hide')
+    implementation project(':Database')
+    implementation project(':Language')
+    implementation project(':Language:Paper')
+    implementation project(':Language:Spigot')
 }
 
 shadowJar {

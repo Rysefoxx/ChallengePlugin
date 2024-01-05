@@ -11,4 +11,8 @@ public abstract class AbstractChallengeModule {
 
     protected final ChallengeType challengeType;
 
+    public void end() {
+        //TODO: Implement end method
+    }
+
 }

@@ -4,7 +4,6 @@ repositories {
     maven {
         url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
-
     maven {
         url 'https://s01.oss.sonatype.org/content/groups/public/'
     }
@@ -13,4 +12,5 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT'
     compileOnly 'io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.5.4-DEV'
+    compileOnly 'org.json:json:20231013'
 }
