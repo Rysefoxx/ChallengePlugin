@@ -38,6 +38,7 @@ public class CommandLanguage implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             Language language = Language.fromName(args[0]);
             if (language == null) {
+                this.messageService.sendTranslatedMessage(player, "invalid_language");
                 this.messageService.sendTranslatedMessage(player, "invalid_language", TranslationKeyDefaults.PREFIX, args[0]);
                 return true;
             }

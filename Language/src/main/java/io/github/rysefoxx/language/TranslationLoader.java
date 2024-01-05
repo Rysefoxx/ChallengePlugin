@@ -7,6 +7,7 @@ import io.github.rysefoxx.database.AsyncDatabaseManager;
 import io.github.rysefoxx.database.ConnectionManager;
 import io.github.rysefoxx.language.command.CommandLanguage;
 import io.github.rysefoxx.language.listener.ConnectionListener;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -31,8 +32,10 @@ import java.util.logging.Level;
  */
 public class TranslationLoader implements TranslationService {
 
+    @Getter
     private final HashMap<String, HashMap<String, String>> translations = new HashMap<>();
     private final HashMap<UUID, Language> playerLanguage = new HashMap<>();
+    @Getter
     private ChallengePlugin plugin;
     private ConnectionManager connectionManager;
     private AsyncDatabaseManager asyncDatabaseManager;

@@ -13,3 +13,5 @@ libraries:
   - org.mariadb.jdbc:mariadb-java-client:3.3.2
   - commons-io:commons-io:2.14.0
   - org.json:json:20231013
+  - net.kyori:adventure-text-minimessage:4.14.0
+  - net.kyori:adventure-platform-bukkit:4.3.1
