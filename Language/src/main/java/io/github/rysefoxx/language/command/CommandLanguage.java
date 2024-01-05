@@ -1,12 +1,11 @@
 package io.github.rysefoxx.language.command;
 
 import io.github.rysefoxx.core.registry.ServiceRegistry;
+import io.github.rysefoxx.core.service.IMessageService;
 import io.github.rysefoxx.core.util.StringUtil;
 import io.github.rysefoxx.language.Language;
-import io.github.rysefoxx.language.MessageServiceFactory;
 import io.github.rysefoxx.language.TranslationKeyDefaults;
 import io.github.rysefoxx.language.TranslationLoader;
-import io.github.rysefoxx.language.service.MessageService;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,11 +24,11 @@ import java.util.List;
  */
 public class CommandLanguage implements CommandExecutor, TabCompleter {
 
-    private final MessageService messageService;
+    private final IMessageService messageService;
     private final TranslationLoader translationLoader;
 
     public CommandLanguage() {
-        this.messageService = MessageServiceFactory.createMessageService();
+        this.messageService = ServiceRegistry.findService(IMessageService.class);
         this.translationLoader = ServiceRegistry.findService(TranslationLoader.class);
     }
 

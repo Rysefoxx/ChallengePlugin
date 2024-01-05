@@ -1,11 +1,9 @@
 package io.github.rysefoxx.database;
 
 import io.github.rysefoxx.core.ChallengePlugin;
-import io.github.rysefoxx.core.service.DatabaseService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;

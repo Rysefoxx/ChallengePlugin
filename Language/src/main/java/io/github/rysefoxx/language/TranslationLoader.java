@@ -2,7 +2,7 @@ package io.github.rysefoxx.language;
 
 import io.github.rysefoxx.core.ChallengePlugin;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
-import io.github.rysefoxx.core.service.TranslationService;
+import io.github.rysefoxx.core.service.ITranslationService;
 import io.github.rysefoxx.database.AsyncDatabaseManager;
 import io.github.rysefoxx.database.ConnectionManager;
 import io.github.rysefoxx.language.command.CommandLanguage;
@@ -30,7 +30,7 @@ import java.util.logging.Level;
  * @author Rysefoxx
  * @since 05.01.2024
  */
-public class TranslationLoader implements TranslationService {
+public class TranslationLoader implements ITranslationService {
 
     @Getter
     private final HashMap<String, HashMap<String, String>> translations = new HashMap<>();
@@ -55,7 +55,6 @@ public class TranslationLoader implements TranslationService {
      * Registers all commands.
      */
     private void registerCommand() {
-        Objects.requireNonNull(Bukkit.getPluginCommand("language")).setExecutor(new CommandLanguage());
     }
 
     /**

@@ -1,8 +1,9 @@
 {
   "services": [
     {
-      "name": "DatabaseService",
+      "name": "IDatabaseService",
       "initialization_method": "onEnable",
+      "terminate_method": "onDisable",
       "initialization_priority": 1,
       "implemented_classes": [
         "io.github.rysefoxx.database.AsyncDatabaseManager",
@@ -10,19 +11,22 @@
       ]
     },
     {
-      "name": "TranslationService",
+      "name": "ITranslationService",
       "initialization_method": "onEnable",
+      "terminate_method": "",
       "initialization_priority": 2,
       "implemented_classes": [
-        "io.github.rysefoxx.language.TranslationLoader"
+        "io.github.rysefoxx.language.TranslationLoader",
+        "io.github.rysefoxx.language.service.MessageService"
       ]
     },
     {
-      "name": "CommandService",
+      "name": "IChallengeService",
       "initialization_method": "onEnable",
+      "terminate_method": "",
       "initialization_priority": 3,
       "implemented_classes": [
-        "io.github.rysefoxx.hide.CommandHide"
+        "io.github.rysefoxx.challenge.NoCraftingTable"
       ]
     }
   ]

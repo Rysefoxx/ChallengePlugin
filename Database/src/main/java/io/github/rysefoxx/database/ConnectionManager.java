@@ -4,7 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.rysefoxx.core.ChallengePlugin;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
-import io.github.rysefoxx.core.service.DatabaseService;
+import io.github.rysefoxx.core.service.IDatabaseService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,7 +20,7 @@ import java.sql.SQLException;
  * @author Rysefoxx
  * @since 05.01.2024
  */
-public class ConnectionManager implements DatabaseService {
+public class ConnectionManager implements IDatabaseService {
 
     private ChallengePlugin plugin;
     @Getter
@@ -39,7 +39,7 @@ public class ConnectionManager implements DatabaseService {
     }
 
     @Override
-    public void onDisable(@NotNull ChallengePlugin plugin) {
+    public void onDisable() {
         closeConnection();
     }
 

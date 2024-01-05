@@ -11,10 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/Core" />
             <option value="$PROJECT_DIR$/Database" />
-            <option value="$PROJECT_DIR$/Hide" />
             <option value="$PROJECT_DIR$/Language" />
-            <option value="$PROJECT_DIR$/Language/Paper" />
-            <option value="$PROJECT_DIR$/Language/Spigot" />
             <option value="$PROJECT_DIR$/NoCraftingTable" />
           </set>
         </option>

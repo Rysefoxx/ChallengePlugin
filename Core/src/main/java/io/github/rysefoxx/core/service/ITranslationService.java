@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Rysefoxx
  * @since 05.01.2024
  */
-public interface DatabaseService {
+public interface ITranslationService {
 
     /**
      * Will be called when the plugin is enabled.
@@ -15,10 +15,5 @@ public interface DatabaseService {
      * @param plugin The {@link ChallengePlugin} to load the translations from.
      */
     void onEnable(@NotNull ChallengePlugin plugin);
-
-    /**
-     * Will be called when the plugin is disabled.
-     */
-    void onDisable(@NotNull ChallengePlugin plugin);
 
 }

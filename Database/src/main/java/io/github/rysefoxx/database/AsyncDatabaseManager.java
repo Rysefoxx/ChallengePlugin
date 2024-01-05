@@ -2,7 +2,7 @@ package io.github.rysefoxx.database;
 
 import io.github.rysefoxx.core.ChallengePlugin;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
-import io.github.rysefoxx.core.service.DatabaseService;
+import io.github.rysefoxx.core.service.IDatabaseService;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutorService;
@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
  * @author Rysefoxx
  * @since 02.01.2024
  */
-public class AsyncDatabaseManager implements DatabaseService {
+public class AsyncDatabaseManager implements IDatabaseService {
 
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
@@ -44,7 +44,8 @@ public class AsyncDatabaseManager implements DatabaseService {
     }
 
     @Override
-    public void onDisable(@NotNull ChallengePlugin plugin) {
+    public void onDisable() {
+        ChallengePlugin.logger().warning("Shutting down executor service...");
         shutdownExecutorService();
     }
 }

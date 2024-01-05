@@ -13,4 +13,5 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT'
     compileOnly 'io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.5.4-DEV'
     compileOnly 'org.json:json:20231013'
+    compileOnly 'org.reflections:reflections:0.10.2'
 }

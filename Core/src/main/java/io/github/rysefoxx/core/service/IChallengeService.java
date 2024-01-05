@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Rysefoxx
  * @since 05.01.2024
  */
-public interface TranslationService {
+public interface IChallengeService {
 
     /**
      * Will be called when the plugin is enabled.
