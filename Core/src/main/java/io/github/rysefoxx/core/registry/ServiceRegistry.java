@@ -21,7 +21,6 @@ public class ServiceRegistry {
 
     @SuppressWarnings("unchecked")
     public static <T> T findService(@NotNull Class<T> serviceClass) {
-        ChallengePlugin.logger().info("Getting service " + serviceClass.getSimpleName());
         return (T) SERVICES.get(serviceClass);
     }
 }

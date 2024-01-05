@@ -31,7 +31,8 @@ public class NoCraftingTable extends AbstractChallengeModule implements Listener
 
     @EventHandler
     public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
-        //TODO: TIMER
+        if(!isTimerEnabled()) return;
+        //TODO: CHECK IF CHALLENGE IS ACTIVE
         Player player = event.getPlayer();
         if (ignore(player)) return;
 

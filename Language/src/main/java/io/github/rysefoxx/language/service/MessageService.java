@@ -27,7 +27,6 @@ public class MessageService implements ITranslationService, IMessageService {
     public void onEnable(@NotNull ChallengePlugin plugin) {
         ServiceRegistry.registerService(IMessageService.class, this);
         this.translationLoader = ServiceRegistry.findService(TranslationLoader.class);
-        Objects.requireNonNull(Bukkit.getPluginCommand("language")).setExecutor(new CommandLanguage());
     }
 
     @Override

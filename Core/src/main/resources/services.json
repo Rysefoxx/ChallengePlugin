@@ -28,6 +28,25 @@
       "implemented_classes": [
         "io.github.rysefoxx.challenge.NoCraftingTable"
       ]
+    },
+    {
+      "name": "ITimerService",
+      "initialization_method": "onEnable",
+      "terminate_method": "",
+      "initialization_priority": 4,
+      "implemented_classes": [
+        "io.github.rysefoxx.timer.TimerService"
+      ]
+    },
+    {
+      "name": "ICommandService",
+      "initialization_method": "onEnable",
+      "terminate_method": "",
+      "initialization_priority": 5,
+      "implemented_classes": [
+        "io.github.rysefoxx.language.command.CommandLanguage",
+        "io.github.rysefoxx.timer.CommandTimer"
+      ]
     }
   ]
 }

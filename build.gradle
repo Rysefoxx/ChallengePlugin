@@ -42,6 +42,7 @@ dependencies {
     implementation project(':NoCraftingTable')
     implementation project(':Database')
     implementation project(':Language')
+    implementation project(':Timer')
 }
 
 shadowJar {

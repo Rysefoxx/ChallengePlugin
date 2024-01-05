@@ -1,11 +1,14 @@
 package io.github.rysefoxx.language.command;
 
+import io.github.rysefoxx.core.ChallengePlugin;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
+import io.github.rysefoxx.core.service.ICommandService;
 import io.github.rysefoxx.core.service.IMessageService;
 import io.github.rysefoxx.core.util.StringUtil;
 import io.github.rysefoxx.language.Language;
 import io.github.rysefoxx.language.TranslationKeyDefaults;
 import io.github.rysefoxx.language.TranslationLoader;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,19 +20,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Rysefoxx
  * @since 05.01.2024
  */
-public class CommandLanguage implements CommandExecutor, TabCompleter {
+public class CommandLanguage implements CommandExecutor, TabCompleter, ICommandService {
 
-    private final IMessageService messageService;
-    private final TranslationLoader translationLoader;
+    private IMessageService messageService;
+    private TranslationLoader translationLoader;
 
-    public CommandLanguage() {
+    @Override
+    public void onEnable(@NotNull ChallengePlugin plugin) {
         this.messageService = ServiceRegistry.findService(IMessageService.class);
         this.translationLoader = ServiceRegistry.findService(TranslationLoader.class);
+        Objects.requireNonNull(Bukkit.getPluginCommand("language")).setExecutor(this);
     }
 
     @Override
@@ -53,7 +59,10 @@ public class CommandLanguage implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if (!sender.hasPermission("challenge.language")) return true;
+        if (!sender.hasPermission("challenge.language")) {
+            this.messageService.sendTranslatedMessage(player, "no_permission", TranslationKeyDefaults.PREFIX);
+            return true;
+        }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("config") && args[1].equalsIgnoreCase("reload")) {
             this.translationLoader.reload();
@@ -79,6 +88,6 @@ public class CommandLanguage implements CommandExecutor, TabCompleter {
         if (!sender.hasPermission("challenge.language")) return List.of();
         if (args.length == 2) return List.of("reload");
 
-        return null;
+        return List.of();
     }
 }

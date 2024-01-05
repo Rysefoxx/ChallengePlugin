@@ -3,3 +3,5 @@ include 'Core'
 include 'NoCraftingTable'
 include 'Database'
 include 'Language'
+include 'Timer'
+

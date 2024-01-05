@@ -1,8 +1,9 @@
 package io.github.rysefoxx.core.challenge;
 
-import io.github.rysefoxx.core.service.IMessageService;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
 import io.github.rysefoxx.core.server.ServerSoftwareType;
+import io.github.rysefoxx.core.service.IMessageService;
+import io.github.rysefoxx.core.service.ITimerService;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -41,11 +42,26 @@ public abstract class AbstractChallengeModule {
         return this.supportedSoftware.contains(serverSoftwareType);
     }
 
+    /**
+     * Ends the challenge and sends a message to all players
+     *
+     * @param trigger The player who triggered the end
+     */
     public void end(@NotNull Player trigger) {
         IMessageService service = ServiceRegistry.findService(IMessageService.class);
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.setGameMode(GameMode.SPECTATOR);
             service.sendTranslatedMessage(player, "challenge_end", "prefix", trigger.getName());
         });
+    }
+
+    /**
+     * Checks if the timer is enabled
+     *
+     * @return true if enabled, false if not
+     */
+    public boolean isTimerEnabled() {
+        ITimerService service = ServiceRegistry.findService(ITimerService.class);
+        return service.isTimerEnabled();
     }
 }

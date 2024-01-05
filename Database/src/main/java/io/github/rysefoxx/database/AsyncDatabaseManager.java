@@ -17,8 +17,20 @@ public class AsyncDatabaseManager implements IDatabaseService {
 
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
-    /***
+    @Override
+    public void onEnable(@NotNull ChallengePlugin plugin) {
+        ServiceRegistry.registerService(AsyncDatabaseManager.class, this);
+    }
+
+    @Override
+    public void onDisable() {
+        ChallengePlugin.logger().warning("Shutting down executor service...");
+        shutdownExecutorService();
+    }
+
+    /**
      * Executes a runnable async. If a callback is provided, it will be called on success or failure.
+     *
      * @param runnable The runnable to execute.
      */
     public void executeAsync(@NotNull Runnable runnable) {
@@ -34,19 +46,8 @@ public class AsyncDatabaseManager implements IDatabaseService {
     /**
      * Shuts down the executor service.
      */
-    public void shutdownExecutorService() {
+    private void shutdownExecutorService() {
         if (EXECUTOR_SERVICE.isShutdown()) return;
         EXECUTOR_SERVICE.shutdown();
-    }
-
-    @Override
-    public void onEnable(@NotNull ChallengePlugin plugin) {
-        ServiceRegistry.registerService(AsyncDatabaseManager.class, this);
-    }
-
-    @Override
-    public void onDisable() {
-        ChallengePlugin.logger().warning("Shutting down executor service...");
-        shutdownExecutorService();
     }
 }

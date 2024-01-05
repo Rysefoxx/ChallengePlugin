@@ -6,6 +6,7 @@ main: io.github.rysefoxx.core.ChallengePlugin
 commands:
   language:
   hide:
+  timer:
 libraries:
   - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.5.4-DEV
   - com.mysql:mysql-connector-j:8.2.0

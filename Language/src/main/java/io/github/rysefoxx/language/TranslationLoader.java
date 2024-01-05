@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -72,7 +74,7 @@ public class TranslationLoader implements ITranslationService {
             try {
                 this.plugin.saveResource("messages_" + language.getCode() + ".properties", false);
             } catch (IllegalArgumentException exception) {
-                this.plugin.getLogger().severe("Failed to save messages for language " + language + "!");
+                ChallengePlugin.logger().severe("Failed to save messages for language " + language + "!");
                 continue;
             }
             cacheTranslations(plugin, language);
@@ -106,7 +108,8 @@ public class TranslationLoader implements ITranslationService {
 
         Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream(file)) {
-            properties.load(fis);
+            InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            properties.load(reader);
         } catch (IOException exception) {
             plugin.getLogger().severe("Die Übersetzungsdatei für die Sprache " + language + " ist invalide! " + exception.getMessage());
             return;
@@ -166,7 +169,7 @@ public class TranslationLoader implements ITranslationService {
             try (Connection connection = this.connectionManager.getConnection()) {
                 try (PreparedStatement preparedStatement = this.connectionManager.prepareStatement(connection, "SELECT * FROM challenge.language WHERE uuid = ?")) {
                     if (preparedStatement == null) {
-                        this.plugin.getLogger().severe("Failed to load language from database, because the prepared statement is null!");
+                        ChallengePlugin.logger().severe("Failed to load language from database, because the prepared statement is null!");
                         save(uuid, Language.ENGLISH);
                         future.complete(Language.ENGLISH);
                         return;
@@ -193,7 +196,7 @@ public class TranslationLoader implements ITranslationService {
                     }
                 }
             } catch (SQLException e) {
-                this.plugin.getLogger().log(Level.SEVERE, "Failed to establish database connection!", e);
+                ChallengePlugin.logger().log(Level.SEVERE, "Failed to establish database connection!", e);
                 save(uuid, Language.ENGLISH);
                 future.complete(Language.ENGLISH);
             }
@@ -217,7 +220,7 @@ public class TranslationLoader implements ITranslationService {
                                  "ON DUPLICATE KEY UPDATE language = VALUES(language)")) {
 
                 if (preparedStatement == null) {
-                    this.plugin.getLogger().severe("Failed to save language for " + uuid + " to database, because the prepared statement is null!");
+                    ChallengePlugin.logger().severe("Failed to save language for " + uuid + " to database, because the prepared statement is null!");
                     return;
                 }
 
@@ -225,7 +228,7 @@ public class TranslationLoader implements ITranslationService {
                 preparedStatement.setString(2, language.toString());
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
-                this.plugin.getLogger().log(Level.SEVERE, "Failed to save language for " + uuid + " to database!", e);
+                ChallengePlugin.logger().log(Level.SEVERE, "Failed to save language for " + uuid + " to database!", e);
             }
         });
     }
