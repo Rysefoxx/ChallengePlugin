@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
 /**
  * @author Rysefoxx
@@ -25,7 +26,7 @@ public class AsyncDatabaseManager implements IDatabaseService {
             try {
                 runnable.run();
             } catch (Throwable throwable) {
-                throwable.printStackTrace();
+                ChallengePlugin.logger().log(Level.SEVERE, "An error occurred while executing a runnable async.", throwable);
             }
         });
     }
