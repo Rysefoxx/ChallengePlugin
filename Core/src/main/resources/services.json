@@ -28,7 +28,8 @@
       "initialization_priority": 3,
       "implemented_classes": [
         "io.github.rysefoxx.challenge.NoCraftingTable",
-        "io.github.rysefoxx.challenge.NoFallDamage"
+        "io.github.rysefoxx.challenge.NoFallDamage",
+        "io.github.rysefoxx.challenge.NoJump"
       ]
     },
     {

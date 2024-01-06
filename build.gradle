@@ -47,6 +47,7 @@ dependencies {
     implementation project(':Timer')
     implementation project(':NoCraftingTable')
     implementation project(':NoFallDamage')
+    implementation project(':NoJump')
 }
 
 shadowJar {
