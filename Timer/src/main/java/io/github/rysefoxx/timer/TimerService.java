@@ -8,8 +8,6 @@ import io.github.rysefoxx.core.util.TimeUtil;
 import io.github.rysefoxx.database.AsyncDatabaseManager;
 import io.github.rysefoxx.database.ConnectionManager;
 import io.github.rysefoxx.language.TranslationKeyDefaults;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -115,10 +113,10 @@ public class TimerService implements ITimerService {
         Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 if (!this.timer.isEnabled()) {
-                    onlinePlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§6§o" + this.messageService.getTranslatedMessage(onlinePlayer, "timer_paused")));
+                    onlinePlayer.sendActionBar(this.messageService.getTranslatedMessage(onlinePlayer, "timer_actionbar_paused"));
                     continue;
                 }
-                onlinePlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§6" + TimeUtil.formatSecondsToTimeString(this.timer.getTime())));
+                onlinePlayer.sendActionBar(this.messageService.getTranslatedMessage(onlinePlayer, "timer_actionbar_running", TimeUtil.formatSecondsToTimeString(this.timer.getTime())));
             }
 
             if (!this.timer.isEnabled()) return;

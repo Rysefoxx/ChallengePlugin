@@ -27,7 +27,8 @@
       "terminate_method": "",
       "initialization_priority": 3,
       "implemented_classes": [
-        "io.github.rysefoxx.challenge.NoCraftingTable"
+        "io.github.rysefoxx.challenge.NoCraftingTable",
+        "io.github.rysefoxx.challenge.NoFallDamage"
       ]
     },
     {
@@ -46,7 +47,8 @@
       "initialization_priority": 5,
       "implemented_classes": [
         "io.github.rysefoxx.language.command.CommandLanguage",
-        "io.github.rysefoxx.timer.CommandTimer"
+        "io.github.rysefoxx.timer.CommandTimer",
+        "io.github.rysefoxx.core.command.CommandChallenge"
       ]
     }
   ]

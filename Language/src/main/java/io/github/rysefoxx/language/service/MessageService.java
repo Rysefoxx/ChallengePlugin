@@ -6,13 +6,12 @@ import io.github.rysefoxx.core.registry.ServiceRegistry;
 import io.github.rysefoxx.core.service.ITranslationService;
 import io.github.rysefoxx.language.Language;
 import io.github.rysefoxx.language.TranslationLoader;
-import io.github.rysefoxx.language.command.CommandLanguage;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import javax.swing.*;
 
 /**
  * @author Rysefoxx
@@ -31,28 +30,30 @@ public class MessageService implements ITranslationService, IMessageService {
 
     @Override
     public void sendTranslatedMessage(@NotNull Player player, @NotNull String messageKey) {
-        String translation = getTranslatedMessage(player, messageKey);
-        Audience audience = ChallengePlugin.getAdventure().player(player);
-        audience.sendMessage(ChallengePlugin.getMiniMessage().deserialize(translation));
+        player.sendMessage(getTranslatedMessage(player, messageKey));
     }
 
     @Override
     public void sendTranslatedMessage(@NotNull Player player, @NotNull String messageKey, String @NotNull ... replacements) {
-        Audience audience = ChallengePlugin.getAdventure().player(player);
-        audience.sendMessage(getTranslatedMessage(player, messageKey, replacements));
+        player.sendMessage(getTranslatedMessage(player, messageKey, replacements));
     }
 
     @Override
-    public @NotNull String getTranslatedMessage(@NotNull Player player, @NotNull String messageKey) {
+    public @NotNull String getTranslatedMessageLegacy(@NotNull Player player, @NotNull String messageKey) {
         Language language = this.translationLoader.getLanguageSync(player.getUniqueId());
         return this.translationLoader.getTranslations().get(language.getCode()).getOrDefault(messageKey, messageKey);
     }
 
     @Override
-    public <T> @NotNull T getTranslatedMessage(@NotNull Player player, @NotNull String messageKey, String @NotNull ... replacements) {
+    public @NotNull Component getTranslatedMessage(@NotNull Player player, @NotNull String messageKey) {
+        return ChallengePlugin.getMiniMessage().deserialize(getTranslatedMessageLegacy(player, messageKey));
+    }
+
+    @Override
+    public @NotNull Component getTranslatedMessage(@NotNull Player player, @NotNull String messageKey, String @NotNull ... replacements) {
         Language language = this.translationLoader.getLanguageSync(player.getUniqueId());
-        String message = getTranslatedMessage(player, messageKey);
-        if (message.equals(messageKey)) return (T) ChallengePlugin.getMiniMessage().deserialize(message);
+        String message = getTranslatedMessageLegacy(player, messageKey);
+        if (message.equals(messageKey)) return ChallengePlugin.getMiniMessage().deserialize(message);
 
         for (int i = 0; i < replacements.length; i++) {
             String replacement = replacements[i];
@@ -64,6 +65,6 @@ public class MessageService implements ITranslationService, IMessageService {
             message = message.replace("{" + i + "}", replacement);
         }
 
-        return (T) ChallengePlugin.getMiniMessage().deserialize(message);
+        return ChallengePlugin.getMiniMessage().deserialize(message);
     }
 }

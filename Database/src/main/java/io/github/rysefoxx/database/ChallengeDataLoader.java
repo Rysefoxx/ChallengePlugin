@@ -152,12 +152,12 @@ public class ChallengeDataLoader implements IDatabaseService, IChallengeDataServ
         List<SettingModule<?>> defaultSettings = challengeModule.defaultSettings();
         for (SettingModule<?> setting : defaultSettings) {
             challengeModule.addSetting(setting);
-            save(challengeModule, setting);
+            saveSettings(challengeModule, setting);
         }
     }
 
     @Override
-    public void save(@NotNull AbstractChallengeModule challengeModule, @NotNull SettingModule<?> settingModule) {
+    public void saveSettings(@NotNull AbstractChallengeModule challengeModule, @NotNull SettingModule<?> settingModule) {
         this.asyncDatabaseManager.executeAsync(() -> {
             try (Connection connection = this.connectionManager.getConnection()) {
                 String query = "INSERT INTO challenge.challenge_settings (name, setting_key, setting) VALUES (?, ?, ?) " +
@@ -175,6 +175,28 @@ public class ChallengeDataLoader implements IDatabaseService, IChallengeDataServ
                 }
             } catch (SQLException e) {
                 ChallengePlugin.logger().log(Level.SEVERE, "Error during saving challenge setting", e);
+            }
+        });
+    }
+
+    @Override
+    public void saveChallenge(@NotNull AbstractChallengeModule challengeModule) {
+        this.asyncDatabaseManager.executeAsync(() -> {
+            try (Connection connection = this.connectionManager.getConnection()) {
+                String query = "INSERT INTO challenge.challenge_data (name, enabled) VALUES (?, ?) " +
+                        "ON DUPLICATE KEY UPDATE enabled = VALUES(enabled)";
+                try (PreparedStatement preparedStatement = this.connectionManager.prepareStatement(connection, query)) {
+                    if (preparedStatement == null) {
+                        ChallengePlugin.logger().severe("Failed to save challenge data to database, because the prepared statement is null!");
+                        return;
+                    }
+
+                    preparedStatement.setString(1, challengeModule.getId());
+                    preparedStatement.setBoolean(2, challengeModule.isEnabled());
+                    preparedStatement.executeUpdate();
+                }
+            } catch (SQLException e) {
+                ChallengePlugin.logger().log(Level.SEVERE, "Error during saving challenge data", e);
             }
         });
     }

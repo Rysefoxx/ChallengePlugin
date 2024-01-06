@@ -1,12 +1,10 @@
 package io.github.rysefoxx.core;
 
 import io.github.rysefoxx.core.loader.ChallengeModuleLoader;
-import io.github.rysefoxx.core.server.ServerSoftware;
-import io.github.rysefoxx.core.server.ServerSoftwareType;
 import io.github.rysefoxx.core.service.ServiceInitializer;
 import io.github.rysefoxx.core.service.ServiceLoader;
+import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import lombok.Getter;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,16 +21,17 @@ public class ChallengePlugin extends JavaPlugin {
 
     private static Logger logger;
     @Getter
-    private static BukkitAudiences adventure;
-    @Getter
     private static MiniMessage miniMessage;
+    @Getter
+    private static InventoryManager inventoryManager;
 
     private ChallengeModuleLoader challengeModuleLoader;
 
     @Override
     public void onEnable() {
-        adventure = BukkitAudiences.create(this);
         miniMessage = MiniMessage.miniMessage();
+        inventoryManager = new InventoryManager(this);
+        inventoryManager.invoke();
         logger = getLogger();
         logger.setLevel(Level.ALL);
         initializeServices();
@@ -40,12 +39,10 @@ public class ChallengePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        adventure.close();
         ServiceLoader.terminateServices();
     }
 
     private void initializeServices() {
-        ServerSoftwareType softwareType = ServerSoftware.getServerSoftwareType();
         this.challengeModuleLoader = new ChallengeModuleLoader(this);
 
         Map<String, ServiceLoader.ServiceInfo> services = ServiceLoader.loadServices(this);
@@ -54,7 +51,7 @@ public class ChallengePlugin extends JavaPlugin {
             ServiceInitializer.initializeService(serviceInfo, this);
 
             if (name.equals("IChallengeService")) {
-                this.challengeModuleLoader.load(softwareType, serviceInfo);
+                this.challengeModuleLoader.load(serviceInfo);
             }
         });
 
