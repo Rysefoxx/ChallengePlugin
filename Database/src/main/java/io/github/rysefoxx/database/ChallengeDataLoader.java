@@ -152,12 +152,12 @@ public class ChallengeDataLoader implements IDatabaseService, IChallengeDataServ
         List<SettingModule<?>> defaultSettings = challengeModule.defaultSettings();
         for (SettingModule<?> setting : defaultSettings) {
             challengeModule.addSetting(setting);
-            saveSettings(challengeModule, setting);
+            saveSetting(challengeModule, setting);
         }
     }
 
     @Override
-    public void saveSettings(@NotNull AbstractChallengeModule challengeModule, @NotNull SettingModule<?> settingModule) {
+    public void saveSetting(@NotNull AbstractChallengeModule challengeModule, @NotNull SettingModule<?> settingModule) {
         this.asyncDatabaseManager.executeAsync(() -> {
             try (Connection connection = this.connectionManager.getConnection()) {
                 String query = "INSERT INTO challenge.challenge_settings (name, setting_key, setting) VALUES (?, ?, ?) " +

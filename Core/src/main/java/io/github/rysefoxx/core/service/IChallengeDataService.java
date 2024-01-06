@@ -23,7 +23,7 @@ public interface IChallengeDataService {
      * @param challengeModule The {@link AbstractChallengeModule} to save the data from.
      * @param settingModule   The {@link SettingModule} to save the data from.
      */
-    void saveSettings(@NotNull AbstractChallengeModule challengeModule, @NotNull SettingModule<?> settingModule);
+    void saveSetting(@NotNull AbstractChallengeModule challengeModule, @NotNull SettingModule<?> settingModule);
 
     /**
      * Save the challenge to the database.

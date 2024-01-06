@@ -71,9 +71,9 @@ public abstract class AbstractChallengeModule {
     /**
      * Get a setting by key
      *
-     * @param key The key to get the setting from
+     * @param key  The key to get the setting from
      * @param type The type of the setting
-     * @param <T> The type of the setting
+     * @param <T>  The type of the setting
      * @return The setting value
      */
     public @NotNull <T> SettingModule<T> getSetting(@NotNull String key, Class<T> type) {
@@ -142,5 +142,17 @@ public abstract class AbstractChallengeModule {
      */
     public @Nullable RyseInventory settingsInventory(@NotNull Player player, @NotNull IMessageService messageService) {
         return null;
+    }
+
+    /**
+     * This method is called when the timer starts
+     */
+    public void onTimerStart() {
+    }
+
+    /**
+     * This method is called when the timer stops
+     */
+    public void onTimerStop() {
     }
 }

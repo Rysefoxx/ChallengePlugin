@@ -1,6 +1,8 @@
 package io.github.rysefoxx.timer;
 
 import io.github.rysefoxx.core.ChallengePlugin;
+import io.github.rysefoxx.core.challenge.AbstractChallengeModule;
+import io.github.rysefoxx.core.loader.ChallengeModuleLoader;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
 import io.github.rysefoxx.core.service.IMessageService;
 import io.github.rysefoxx.core.service.ITimerService;
@@ -31,6 +33,7 @@ public class TimerService implements ITimerService {
     private IMessageService messageService;
     private ConnectionManager connectionManager;
     private AsyncDatabaseManager asyncDatabaseManager;
+    private ChallengeModuleLoader challengeModuleLoader;
 
     @Override
     public void onEnable(@NotNull ChallengePlugin plugin) {
@@ -40,6 +43,7 @@ public class TimerService implements ITimerService {
         this.messageService = ServiceRegistry.findService(IMessageService.class);
         this.connectionManager = ServiceRegistry.findService(ConnectionManager.class);
         this.asyncDatabaseManager = ServiceRegistry.findService(AsyncDatabaseManager.class);
+        this.challengeModuleLoader = plugin.getChallengeModuleLoader();
         load();
         displayScheduler();
     }
@@ -59,6 +63,7 @@ public class TimerService implements ITimerService {
         this.timer.setEnabled(true);
         save();
         this.messageService.sendTranslatedMessage(player, "timer_enabled", TranslationKeyDefaults.PREFIX);
+        this.challengeModuleLoader.getChallengeModules().forEach(AbstractChallengeModule::onTimerStart);
     }
 
     @Override
@@ -73,6 +78,8 @@ public class TimerService implements ITimerService {
         save();
         if (player != null)
             this.messageService.sendTranslatedMessage(player, "timer_disabled", TranslationKeyDefaults.PREFIX);
+
+        this.challengeModuleLoader.getChallengeModules().forEach(AbstractChallengeModule::onTimerStop);
     }
 
     @Override

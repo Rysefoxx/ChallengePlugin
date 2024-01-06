@@ -1,6 +1,5 @@
 package io.github.rysefoxx.challenge;
 
-import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import io.github.rysefoxx.core.ChallengePlugin;
 import io.github.rysefoxx.core.challenge.AbstractChallengeModule;
 import io.github.rysefoxx.core.challenge.ChallengeType;
@@ -17,12 +16,17 @@ import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,14 +36,14 @@ import java.util.List;
  * @author Rysefoxx
  * @since 06.01.2024
  */
-public class NoArmor extends AbstractChallengeModule implements Listener, IChallengeService {
+public class SpeedTen extends AbstractChallengeModule implements Listener, IChallengeService {
 
-    private static final String ALLOW_PUMPKIN_KEY = "allow_pumpkin";
+    private static final String AMPLIFIER_KEY = "amplifier";
     private ChallengePlugin plugin;
     private IChallengeDataService challengeDataService;
 
-    public NoArmor() {
-        super("no_armor", ChallengeType.CHALLENGE);
+    public SpeedTen() {
+        super("speed_ten", ChallengeType.CHALLENGE);
     }
 
     @Override
@@ -49,19 +53,38 @@ public class NoArmor extends AbstractChallengeModule implements Listener, IChall
     }
 
     @EventHandler
-    public void onPlayerArmorChange(@NotNull PlayerArmorChangeEvent event) {
+    public void onCreatureSpawn(@NotNull CreatureSpawnEvent event) {
+        if (!isEnabled()) return;
+        if (!isTimerEnabled()) return;
+
+        SettingModule<Integer> setting = getSetting(AMPLIFIER_KEY, Integer.class);
+        event.getEntity().addPotionEffect(PotionEffectType.SPEED.createEffect(Integer.MAX_VALUE, setting.getValue() - 1));
+    }
+
+    @EventHandler
+    public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
         if (!isEnabled()) return;
         if (!isTimerEnabled()) return;
 
         Player player = event.getPlayer();
         if (ignore(player)) return;
 
-        ItemStack newItem = event.getNewItem();
-        ItemStack oldItem = event.getOldItem();
-        if ((newItem.getType() == Material.CARVED_PUMPKIN || oldItem.getType() == Material.CARVED_PUMPKIN) && getSetting(ALLOW_PUMPKIN_KEY, Boolean.class).getValue())
-            return;
+        SettingModule<Integer> setting = getSetting(AMPLIFIER_KEY, Integer.class);
+        player.addPotionEffect(PotionEffectType.SPEED.createEffect(Integer.MAX_VALUE, setting.getValue() - 1));
+    }
 
-        end(player);
+    @Override
+    public void onTimerStart() {
+        SettingModule<Integer> setting = getSetting(AMPLIFIER_KEY, Integer.class);
+        Bukkit.getWorlds().forEach(world -> world.getLivingEntities()
+                .forEach(livingEntity -> livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, setting.getValue() - 1))));
+
+    }
+
+    @Override
+    public void onTimerStop() {
+        Bukkit.getWorlds().forEach(world -> world.getLivingEntities()
+                .forEach(livingEntity -> livingEntity.removePotionEffect(PotionEffectType.SPEED)));
     }
 
     @Override
@@ -75,21 +98,24 @@ public class NoArmor extends AbstractChallengeModule implements Listener, IChall
     @Override
     public @Nullable RyseInventory settingsInventory(@NotNull Player player, @NotNull IMessageService messageService) {
         return RyseInventory.builder()
-                .title(messageService.getTranslatedMessage(player, "no_armor_settings_title"))
-                .disableUpdateTask()
+                .title(messageService.getTranslatedMessage(player, this.id + "_settings_title"))
                 .rows(1)
+                .disableUpdateTask()
                 .provider(new InventoryProvider() {
                     @Override
                     public void init(Player player, InventoryContents contents) {
                         contents.fill(InventoryDefaults.BORDER_ITEM);
-                        InventoryDefaults.back(contents, player, messageService, 0, 0);
-                        contents.set(4, IntelligentItem.of(getPumpkinSetting(player, messageService), clickEvent -> {
-                            SettingModule<Boolean> setting = getSetting(ALLOW_PUMPKIN_KEY, Boolean.class);
-                            updateSetting(ALLOW_PUMPKIN_KEY, !setting.getValue());
-                            challengeDataService.saveSetting(NoArmor.this, setting);
-                            contents.update(clickEvent.getSlot(), getPumpkinSetting(player, messageService));
+
+                        SettingModule<Integer> setting = getSetting(AMPLIFIER_KEY, Integer.class);
+                        contents.set(4, IntelligentItem.of(getSpeedSetting(player, messageService), clickEvent -> {
+                            int change = clickEvent.isRightClick() ? -1 : 1;
+                            int newSettingValue = setting.getValue() + change;
+                            updateSetting(AMPLIFIER_KEY, newSettingValue);
+                            challengeDataService.saveSetting(SpeedTen.this, setting);
+                            contents.update(clickEvent.getSlot(), getSpeedSetting(player, messageService));
                             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 2);
                         }));
+
                     }
                 })
                 .build(this.plugin);
@@ -98,21 +124,22 @@ public class NoArmor extends AbstractChallengeModule implements Listener, IChall
     @Override
     public @NotNull List<SettingModule<?>> defaultSettings() {
         return List.of(
-                new SettingModule<>(ALLOW_PUMPKIN_KEY, true)
+                new SettingModule<>(AMPLIFIER_KEY, 10)
         );
     }
 
     /**
-     * Setting item for {@link NoArmor#ALLOW_PUMPKIN_KEY}
+     * Setting item for {@link SpeedTen#AMPLIFIER_KEY}
      *
      * @param player         to get the language
      * @param messageService to get the language translation
-     * @return the setting item for {@link NoArmor#ALLOW_PUMPKIN_KEY}
+     * @return the setting item for {@link SpeedTen#AMPLIFIER_KEY}
      */
-    private @NotNull ItemStack getPumpkinSetting(@NotNull Player player, @NotNull IMessageService messageService) {
-        SettingModule<Boolean> setting = getSetting(ALLOW_PUMPKIN_KEY, Boolean.class);
-        return ItemBuilder.of(Material.valueOf(messageService.getTranslatedMessageLegacy(player, "no_armor_pumpkin_material")))
-                .displayName(messageService.getTranslatedMessage(player, "no_armor_pumpkin_displayname").append(Component.text(" ")).append(messageService.getTranslatedMessage(player, "enabled_" + setting.getValue())))
+    private @NotNull ItemStack getSpeedSetting(@NotNull Player player, @NotNull IMessageService messageService) {
+        SettingModule<Integer> setting = getSetting(AMPLIFIER_KEY, Integer.class);
+        return ItemBuilder.of(Material.valueOf(messageService.getTranslatedMessageLegacy(player, this.id + "_potion_material")))
+                .displayName(messageService.getTranslatedMessage(player, this.id + "_potion_displayname", setting.getValue().toString()))
+                .lore(StringUtil.splitStringAsComponent(messageService.getTranslatedMessageLegacy(player, this.id + "_potion_lore")))
                 .build();
     }
 }

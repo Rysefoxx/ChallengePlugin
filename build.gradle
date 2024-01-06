@@ -53,6 +53,8 @@ dependencies {
     implementation project(':NoFallDamage')
     implementation project(':NoJump')
     implementation project(':NoArmor')
+    implementation project(':NoTools')
+    implementation project(':SpeedTen')
 }
 
 shadowJar {

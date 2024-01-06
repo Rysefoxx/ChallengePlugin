@@ -30,7 +30,9 @@
         "io.github.rysefoxx.challenge.NoCraftingTable",
         "io.github.rysefoxx.challenge.NoFallDamage",
         "io.github.rysefoxx.challenge.NoJump",
-        "io.github.rysefoxx.challenge.NoArmor"
+        "io.github.rysefoxx.challenge.NoArmor",
+        "io.github.rysefoxx.challenge.NoTools",
+        "io.github.rysefoxx.challenge.SpeedTen"
       ]
     },
     {
