@@ -57,6 +57,8 @@ public class ChallengePlugin extends JavaPlugin {
                 this.challengeModuleLoader.load(softwareType, serviceInfo);
             }
         });
+
+        this.challengeModuleLoader.loadChallengeData();
     }
 
     public static Logger logger() {

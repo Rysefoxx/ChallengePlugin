@@ -2,7 +2,9 @@ package io.github.rysefoxx.core.loader;
 
 import io.github.rysefoxx.core.ChallengePlugin;
 import io.github.rysefoxx.core.challenge.AbstractChallengeModule;
+import io.github.rysefoxx.core.registry.ServiceRegistry;
 import io.github.rysefoxx.core.server.ServerSoftwareType;
+import io.github.rysefoxx.core.service.IChallengeDataService;
 import io.github.rysefoxx.core.service.ServiceLoader;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
@@ -10,9 +12,14 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * @author Rysefoxx
@@ -55,4 +62,11 @@ public class ChallengeModuleLoader {
         }
     }
 
+    /**
+     * Loads all challenge data from the database
+     */
+    public void loadChallengeData() {
+        IChallengeDataService service = ServiceRegistry.findService(IChallengeDataService.class);
+        this.challengeModules.forEach(service::load);
+    }
 }

@@ -7,7 +7,8 @@
       "initialization_priority": 1,
       "implemented_classes": [
         "io.github.rysefoxx.database.AsyncDatabaseManager",
-        "io.github.rysefoxx.database.ConnectionManager"
+        "io.github.rysefoxx.database.ConnectionManager",
+        "io.github.rysefoxx.database.ChallengeDataLoader"
       ]
     },
     {

@@ -4,12 +4,15 @@ import io.github.rysefoxx.core.registry.ServiceRegistry;
 import io.github.rysefoxx.core.server.ServerSoftwareType;
 import io.github.rysefoxx.core.service.IMessageService;
 import io.github.rysefoxx.core.service.ITimerService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +22,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class AbstractChallengeModule {
 
+    @Getter
+    protected final List<SettingModule<?>> settings = new ArrayList<>(defaultSettings());
+
+    @Getter
+    @Setter
+    protected boolean enabled = false;
+    @Getter
+    protected final String id;
     protected final ChallengeType challengeType;
     protected final List<ServerSoftwareType> supportedSoftware;
 
@@ -66,5 +77,39 @@ public abstract class AbstractChallengeModule {
     public boolean isTimerEnabled() {
         ITimerService service = ServiceRegistry.findService(ITimerService.class);
         return service.isTimerEnabled();
+    }
+
+    /**
+     * Get a setting by key
+     *
+     * @param key The key to get the setting from
+     * @param <T> The type of the setting
+     * @return The setting value
+     */
+    public @NotNull <T> T getSetting(@NotNull String key) {
+        return this.settings.stream()
+                .filter(setting -> setting.getKey().equals(key))
+                .map(setting -> (T) setting.getValue())
+                .findFirst()
+                .orElseThrow(() -> new NullPointerException("Setting with key " + key + " not found!"));
+    }
+
+    /**
+     * Add a setting to the challenge
+     *
+     * @param settingModule The setting to add
+     */
+    public void addSetting(@NotNull SettingModule<?> settingModule) {
+        this.settings.removeIf(setting -> setting.getKey().equals(settingModule.getKey()));
+        this.settings.add(settingModule);
+    }
+
+    /**
+     * Gives the default settings for the challenge
+     *
+     * @return The default settings or an empty list if there are no default settings
+     */
+    public @NotNull List<SettingModule<?>> defaultSettings() {
+        return new ArrayList<>();
     }
 }

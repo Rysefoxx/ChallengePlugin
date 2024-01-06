@@ -22,7 +22,7 @@ import java.util.List;
 public class NoCraftingTable extends AbstractChallengeModule implements Listener, IChallengeService {
 
     public NoCraftingTable() {
-        super(ChallengeType.CHALLENGE, List.of(ServerSoftwareType.SPIGOT, ServerSoftwareType.PAPER));
+        super("no-crafting-table", ChallengeType.CHALLENGE, List.of(ServerSoftwareType.SPIGOT, ServerSoftwareType.PAPER));
     }
 
     @Override
@@ -31,8 +31,9 @@ public class NoCraftingTable extends AbstractChallengeModule implements Listener
 
     @EventHandler
     public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
-        if(!isTimerEnabled()) return;
-        //TODO: CHECK IF CHALLENGE IS ACTIVE
+        if (!isEnabled()) return;
+        if (!isTimerEnabled()) return;
+
         Player player = event.getPlayer();
         if (ignore(player)) return;
 

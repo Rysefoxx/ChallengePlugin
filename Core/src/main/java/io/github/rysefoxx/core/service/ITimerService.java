@@ -19,7 +19,6 @@ public interface ITimerService {
      */
     void onEnable(@NotNull ChallengePlugin plugin);
 
-
     /**
      * Checks if the timer is enabled.
      *

@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/Database" />
             <option value="$PROJECT_DIR$/Language" />
             <option value="$PROJECT_DIR$/NoCraftingTable" />
+            <option value="$PROJECT_DIR$/NoFallDamage" />
             <option value="$PROJECT_DIR$/Timer" />
           </set>
         </option>
