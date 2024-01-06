@@ -12,8 +12,10 @@
             <option value="$PROJECT_DIR$/Core" />
             <option value="$PROJECT_DIR$/Database" />
             <option value="$PROJECT_DIR$/Language" />
+            <option value="$PROJECT_DIR$/NoArmor" />
             <option value="$PROJECT_DIR$/NoCraftingTable" />
             <option value="$PROJECT_DIR$/NoFallDamage" />
+            <option value="$PROJECT_DIR$/NoJump" />
             <option value="$PROJECT_DIR$/Timer" />
           </set>
         </option>

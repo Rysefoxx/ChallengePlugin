@@ -48,11 +48,13 @@ public class ChallengePlugin extends JavaPlugin {
         Map<String, ServiceLoader.ServiceInfo> services = ServiceLoader.loadServices(this);
         services.forEach((name, serviceInfo) -> {
             getLogger().info("Initializing service " + serviceInfo.toString());
-            ServiceInitializer.initializeService(serviceInfo, this);
 
             if (name.equals("IChallengeService")) {
                 this.challengeModuleLoader.load(serviceInfo);
+                return;
             }
+
+            ServiceInitializer.initializeService(serviceInfo, this);
         });
 
         this.challengeModuleLoader.loadChallengeData();

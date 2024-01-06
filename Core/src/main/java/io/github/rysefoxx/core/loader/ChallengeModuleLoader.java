@@ -5,6 +5,7 @@ import io.github.rysefoxx.core.challenge.AbstractChallengeModule;
 import io.github.rysefoxx.core.challenge.ChallengeType;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
 import io.github.rysefoxx.core.service.IChallengeDataService;
+import io.github.rysefoxx.core.service.ServiceInitializer;
 import io.github.rysefoxx.core.service.ServiceLoader;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,8 @@ public class ChallengeModuleLoader {
                     Bukkit.getPluginManager().registerEvents((Listener) module, this.plugin);
                     ChallengePlugin.logger().info("Registered listener for challenge module " + implementedClass.getSimpleName() + " successfully.");
                 }
+
+                ServiceInitializer.initializeServices(implementedClass, module, service.initializationMethod(), this.plugin);
             } catch (Exception e) {
                 ChallengePlugin.logger().log(java.util.logging.Level.SEVERE, "Failed to load challenge module " + implementedClass.getSimpleName(), e);
             }

@@ -72,16 +72,18 @@ public abstract class AbstractChallengeModule {
      * Get a setting by key
      *
      * @param key The key to get the setting from
+     * @param type The type of the setting
      * @param <T> The type of the setting
      * @return The setting value
      */
-    public @NotNull <T> T getSetting(@NotNull String key) {
+    public @NotNull <T> SettingModule<T> getSetting(@NotNull String key, Class<T> type) {
         return this.settings.stream()
-                .filter(setting -> setting.getKey().equals(key))
-                .map(setting -> (T) setting.getValue())
+                .filter(setting -> setting.getKey().equals(key) && type.isInstance(setting.getValue()))
+                .map(setting -> (SettingModule<T>) setting)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Setting with key " + key + " not found!"));
     }
+
 
     /**
      * Add a setting to the challenge
@@ -92,6 +94,26 @@ public abstract class AbstractChallengeModule {
         this.settings.removeIf(setting -> setting.getKey().equals(settingModule.getKey()));
         this.settings.add(settingModule);
     }
+
+    /**
+     * Update a setting value
+     *
+     * @param key   The key of the setting
+     * @param value The new value
+     */
+    public void updateSetting(@NotNull String key, @NotNull Object value) {
+        this.settings.stream()
+                .filter(setting -> setting.getKey().equals(key))
+                .findFirst()
+                .ifPresent(setting -> {
+                    if (value.getClass().getName().equals(setting.getType())) {
+                        ((SettingModule) setting).setValue(value);
+                    } else {
+                        throw new IllegalArgumentException("Type mismatch. Expected: " + setting.getType() + ", Provided: " + value.getClass().getName());
+                    }
+                });
+    }
+
 
     /**
      * Gives the default settings for the challenge

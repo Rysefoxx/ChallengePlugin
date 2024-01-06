@@ -29,6 +29,9 @@ allprojects {
         maven {
             url 'https://repo.papermc.io/repository/maven-public/'
         }
+        maven {
+            url 'https://s01.oss.sonatype.org/content/groups/public/'
+        }
     }
 
     dependencies {
@@ -37,6 +40,7 @@ allprojects {
         compileOnly 'org.projectlombok:lombok:1.18.22'
         compileOnly 'org.jetbrains:annotations:23.1.0'
         compileOnly 'net.kyori:adventure-text-minimessage:4.14.0'
+        compileOnly 'io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.5.4-DEV'
     }
 }
 
@@ -48,6 +52,7 @@ dependencies {
     implementation project(':NoCraftingTable')
     implementation project(':NoFallDamage')
     implementation project(':NoJump')
+    implementation project(':NoArmor')
 }
 
 shadowJar {

@@ -29,4 +29,21 @@ public class ServiceInitializer {
             }
         }
     }
+
+    /**
+     * Initializes a service by calling the initialization method on the given instance.
+     *
+     * @param implClass            The implementation class
+     * @param serviceInstance      The instance to call the initialization method on
+     * @param initializationMethod The initialization method name
+     * @param plugin               The plugin to pass to the initialization method
+     */
+    public static void initializeServices(@NotNull Class<?> implClass, @NotNull Object serviceInstance, @NotNull String initializationMethod, @NotNull ChallengePlugin plugin) {
+        try {
+            Method initMethod = implClass.getMethod(initializationMethod, ChallengePlugin.class);
+            initMethod.invoke(serviceInstance, plugin);
+        } catch (Exception e) {
+            ChallengePlugin.logger().log(Level.SEVERE, "Error initializing service " + implClass.getName(), e);
+        }
+    }
 }
