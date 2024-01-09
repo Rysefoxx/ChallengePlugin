@@ -12,6 +12,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 /**
  * @author Rysefoxx
@@ -34,16 +37,9 @@ public class SingleUse extends AbstractChallengeModule implements Listener, ICha
         Player player = (Player) event.getPlayer();
         if (ignore(player)) return;
 
-        for (ItemStack itemStack : player.getInventory().getContents()) {
-            if (itemStack == null) continue;
-            if (!itemStack.getType().isAir()) continue;
-            if (!itemStack.hasItemMeta()) continue;
-            if (!(itemStack.getItemMeta() instanceof Damageable damageable)) continue;
-
-            damageable.setDamage(itemStack.getType().getMaxDurability() - 1);
-            itemStack.setItemMeta(damageable);
-        }
+        Arrays.stream(player.getInventory().getContents()).forEach(this::oneDurability);
     }
+
 
     @EventHandler
     public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
@@ -53,12 +49,21 @@ public class SingleUse extends AbstractChallengeModule implements Listener, ICha
         if (ignore(player)) return;
 
         ItemStack itemStack = event.getItem();
+        oneDurability(itemStack);
+    }
+
+    /**
+     * Sets the durability of an item to 1
+     *
+     * @param itemStack the itemstack to set the durability
+     */
+    private void oneDurability(@Nullable ItemStack itemStack) {
         if (itemStack == null) return;
+        if (!itemStack.getType().isAir()) return;
         if (!itemStack.hasItemMeta()) return;
         if (!(itemStack.getItemMeta() instanceof Damageable damageable)) return;
 
         damageable.setDamage(itemStack.getType().getMaxDurability() - 1);
         itemStack.setItemMeta(damageable);
     }
-
 }
