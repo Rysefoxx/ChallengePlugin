@@ -3,14 +3,19 @@ package io.github.rysefoxx.core.challenge;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
 import io.github.rysefoxx.core.service.IMessageService;
 import io.github.rysefoxx.core.service.ITimerService;
+import io.github.rysefoxx.core.util.ItemBuilder;
+import io.github.rysefoxx.core.util.StringUtil;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -131,7 +136,12 @@ public abstract class AbstractChallengeModule {
      * @param messageService The message service to get the messages from
      * @return The itemstack to display
      */
-    public abstract @NotNull ItemStack displayItem(@NotNull Player player, @NotNull IMessageService messageService);
+    public @NotNull ItemStack displayItem(@NotNull Player player, @NotNull IMessageService messageService) {
+        return ItemBuilder.of(Material.valueOf(messageService.getTranslatedMessageLegacy(player, this.id + "_material")))
+                .displayName(messageService.getTranslatedMessage(player, this.id + "_displayname").append(Component.text(" ")).append(messageService.getTranslatedMessage(player, "enabled_" + isEnabled())))
+                .lore(StringUtil.splitStringAsComponent(messageService.getTranslatedMessageLegacy(player, this.id + "_lore")))
+                .build();
+    }
 
     /**
      * Settings inventory for the challenge. This is called when the player right click on the challenge in the challenge overview
@@ -154,5 +164,12 @@ public abstract class AbstractChallengeModule {
      * This method is called when the timer stops
      */
     public void onTimerStop() {
+    }
+
+    /**
+     * @return The scheduler for the challenge
+     */
+    protected @Nullable BukkitTask scheduler() {
+        return null;
     }
 }

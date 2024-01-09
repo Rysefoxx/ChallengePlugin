@@ -63,7 +63,9 @@ public class TimerService implements ITimerService {
         this.timer.setEnabled(true);
         save();
         this.messageService.sendTranslatedMessage(player, "timer_enabled", TranslationKeyDefaults.PREFIX);
-        this.challengeModuleLoader.getChallengeModules().forEach(AbstractChallengeModule::onTimerStart);
+        this.challengeModuleLoader.getChallengeModules()
+                .stream().filter(AbstractChallengeModule::isEnabled)
+                .forEach(AbstractChallengeModule::onTimerStart);
     }
 
     @Override
@@ -79,7 +81,9 @@ public class TimerService implements ITimerService {
         if (player != null)
             this.messageService.sendTranslatedMessage(player, "timer_disabled", TranslationKeyDefaults.PREFIX);
 
-        this.challengeModuleLoader.getChallengeModules().forEach(AbstractChallengeModule::onTimerStop);
+        this.challengeModuleLoader.getChallengeModules()
+                .stream().filter(AbstractChallengeModule::isEnabled)
+                .forEach(AbstractChallengeModule::onTimerStop);
     }
 
     @Override

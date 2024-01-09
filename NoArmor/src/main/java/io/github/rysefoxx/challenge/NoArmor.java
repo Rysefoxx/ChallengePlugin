@@ -65,14 +65,6 @@ public class NoArmor extends AbstractChallengeModule implements Listener, IChall
     }
 
     @Override
-    public @NotNull ItemStack displayItem(@NotNull Player player, @NotNull IMessageService messageService) {
-        return ItemBuilder.of(Material.valueOf(messageService.getTranslatedMessageLegacy(player, this.id + "_material")))
-                .displayName(messageService.getTranslatedMessage(player, this.id + "_displayname").append(Component.text(" ")).append(messageService.getTranslatedMessage(player, "enabled_" + isEnabled())))
-                .lore(StringUtil.splitStringAsComponent(messageService.getTranslatedMessageLegacy(player, this.id + "_lore")))
-                .build();
-    }
-
-    @Override
     public @Nullable RyseInventory settingsInventory(@NotNull Player player, @NotNull IMessageService messageService) {
         return RyseInventory.builder()
                 .title(messageService.getTranslatedMessage(player, "no_armor_settings_title"))

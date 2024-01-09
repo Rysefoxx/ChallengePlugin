@@ -32,7 +32,16 @@
         "io.github.rysefoxx.challenge.NoJump",
         "io.github.rysefoxx.challenge.NoArmor",
         "io.github.rysefoxx.challenge.NoTools",
-        "io.github.rysefoxx.challenge.SpeedTen"
+        "io.github.rysefoxx.challenge.SpeedTen",
+        "io.github.rysefoxx.challenge.NoBlockBreak",
+        "io.github.rysefoxx.challenge.NoBlockPlace",
+        "io.github.rysefoxx.challenge.NoSneak",
+        "io.github.rysefoxx.challenge.NoSprint",
+        "io.github.rysefoxx.challenge.NoItemDrop",
+        "io.github.rysefoxx.challenge.NoExperience",
+        "io.github.rysefoxx.challenge.SingleUse",
+        "io.github.rysefoxx.challenge.SummedDamage",
+        "io.github.rysefoxx.challenge.SkeletonFollow"
       ]
     },
     {

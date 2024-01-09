@@ -55,6 +55,15 @@ dependencies {
     implementation project(':NoArmor')
     implementation project(':NoTools')
     implementation project(':SpeedTen')
+    implementation project(':NoBlockBreak')
+    implementation project(':NoBlockPlace')
+    implementation project(':NoSneak')
+    implementation project(':NoSprint')
+    implementation project(':NoItemDrop')
+    implementation project(':NoExperience')
+    implementation project(':SingleUse')
+    implementation project(':SummedDamage')
+    implementation project(':SkeletonFollow')
 }
 
 shadowJar {

@@ -1,0 +1,5 @@
+group = 'io.github.rysefoxx.challenge'
+
+dependencies {
+    compileOnly project(':Core')
+}

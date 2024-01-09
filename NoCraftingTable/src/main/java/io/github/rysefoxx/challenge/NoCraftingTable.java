@@ -49,11 +49,4 @@ public class NoCraftingTable extends AbstractChallengeModule implements Listener
         end(player);
     }
 
-    @Override
-    public @NotNull ItemStack displayItem(@NotNull Player player, @NotNull IMessageService messageService) {
-        return ItemBuilder.of(Material.valueOf(messageService.getTranslatedMessageLegacy(player, this.id + "_material")))
-                .displayName(messageService.getTranslatedMessage(player, this.id + "_displayname").append(Component.text(" ")).append(messageService.getTranslatedMessage(player, "enabled_" + isEnabled())))
-                .lore(StringUtil.splitStringAsComponent(messageService.getTranslatedMessageLegacy(player, this.id + "_lore")))
-                .build();
-    }
 }
