@@ -2,6 +2,7 @@ package io.github.rysefoxx.core.command;
 
 import io.github.rysefoxx.core.ChallengePlugin;
 import io.github.rysefoxx.core.challenge.AbstractChallengeModule;
+import io.github.rysefoxx.core.challenge.ChallengeState;
 import io.github.rysefoxx.core.challenge.ChallengeType;
 import io.github.rysefoxx.core.loader.ChallengeModuleLoader;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
@@ -101,7 +102,9 @@ public class CommandChallenge implements CommandExecutor, ICommandService {
                             pagination.addItem(IntelligentItem.of(challengeModule.displayItem(player, messageService), clickEvent -> {
                                 RyseInventory settingsInventory = challengeModule.settingsInventory(player, messageService);
                                 if (settingsInventory == null || clickEvent.isLeftClick()) {
+                                    challengeModule.onStateChange(ChallengeState.BEFORE);
                                     challengeModule.setEnabled(!challengeModule.isEnabled());
+                                    challengeModule.onStateChange(ChallengeState.AFTER);
                                     challengeDataService.saveChallenge(challengeModule);
                                     contents.update(clickEvent.getSlot(), challengeModule.displayItem(player, messageService));
                                     player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 2);

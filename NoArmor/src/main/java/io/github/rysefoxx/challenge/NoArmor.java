@@ -11,12 +11,10 @@ import io.github.rysefoxx.core.service.IChallengeService;
 import io.github.rysefoxx.core.service.IMessageService;
 import io.github.rysefoxx.core.util.InventoryDefaults;
 import io.github.rysefoxx.core.util.ItemBuilder;
-import io.github.rysefoxx.core.util.StringUtil;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -67,7 +65,7 @@ public class NoArmor extends AbstractChallengeModule implements Listener, IChall
     @Override
     public @Nullable RyseInventory settingsInventory(@NotNull Player player, @NotNull IMessageService messageService) {
         return RyseInventory.builder()
-                .title(messageService.getTranslatedMessage(player, "no_armor_settings_title"))
+                .title(messageService.getTranslatedMessage(player, this.id + "_settings_title"))
                 .disableUpdateTask()
                 .rows(1)
                 .provider(new InventoryProvider() {
@@ -103,8 +101,8 @@ public class NoArmor extends AbstractChallengeModule implements Listener, IChall
      */
     private @NotNull ItemStack getPumpkinSetting(@NotNull Player player, @NotNull IMessageService messageService) {
         SettingModule<Boolean> setting = getSetting(ALLOW_PUMPKIN_KEY, Boolean.class);
-        return ItemBuilder.of(Material.valueOf(messageService.getTranslatedMessageLegacy(player, "no_armor_pumpkin_material")))
-                .displayName(messageService.getTranslatedMessage(player, "no_armor_pumpkin_displayname").append(Component.text(" ")).append(messageService.getTranslatedMessage(player, "enabled_" + setting.getValue())))
+        return ItemBuilder.of(Material.valueOf(messageService.getTranslatedMessageLegacy(player, this.id + "_pumpkin_material")))
+                .displayName(messageService.getTranslatedMessage(player, this.id + "_pumpkin_displayname", messageService.getTranslatedMessageLegacy(player, "enabled_" + setting.getValue())))
                 .build();
     }
 }

@@ -30,7 +30,7 @@ import java.util.List;
 @Getter
 public abstract class AbstractChallengeModule {
 
-    protected final List<SettingModule<?>> settings = new ArrayList<>(defaultSettings());
+    protected final List<SettingModule<?>> settings = new ArrayList<>();
 
     @Setter
     protected boolean enabled = false;
@@ -81,12 +81,12 @@ public abstract class AbstractChallengeModule {
      * @param <T>  The type of the setting
      * @return The setting value
      */
-    public @NotNull <T> SettingModule<T> getSetting(@NotNull String key, Class<T> type) {
+    public @NotNull <T> SettingModule<T> getSetting(@NotNull String key, @NotNull Class<T> type) {
         return this.settings.stream()
-                .filter(setting -> setting.getKey().equals(key) && type.isInstance(setting.getValue()))
+                .filter(setting -> setting.getKey().equals(this.id + "_" + key) && type.isInstance(setting.getValue()))
                 .map(setting -> (SettingModule<T>) setting)
                 .findFirst()
-                .orElseThrow(() -> new NullPointerException("Setting with key " + key + " not found!"));
+                .orElseThrow(() -> new NullPointerException("Setting with key " + this.id + "_" + key + " not found!"));
     }
 
 
@@ -96,6 +96,10 @@ public abstract class AbstractChallengeModule {
      * @param settingModule The setting to add
      */
     public void addSetting(@NotNull SettingModule<?> settingModule) {
+        if (!settingModule.getKey().startsWith(this.id)) {
+            settingModule.setKey(this.id + "_" + settingModule.getKey());
+        }
+
         this.settings.removeIf(setting -> setting.getKey().equals(settingModule.getKey()));
         this.settings.add(settingModule);
     }
@@ -108,7 +112,7 @@ public abstract class AbstractChallengeModule {
      */
     public void updateSetting(@NotNull String key, @NotNull Object value) {
         this.settings.stream()
-                .filter(setting -> setting.getKey().equals(key))
+                .filter(setting -> setting.getKey().equals(this.id + "_" + key))
                 .findFirst()
                 .ifPresent(setting -> {
                     if (value.getClass().getName().equals(setting.getType())) {
@@ -171,5 +175,13 @@ public abstract class AbstractChallengeModule {
      */
     protected @Nullable BukkitTask scheduler() {
         return null;
+    }
+
+    /**
+     * This method is called when the challenge state is changed
+     *
+     * @param state The new state
+     */
+    public void onStateChange(@NotNull ChallengeState state) {
     }
 }

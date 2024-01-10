@@ -14,8 +14,9 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public class SettingModule<T> {
 
-    private final String key;
     private final String type;
+    @Setter
+    private String key;
     @Setter
     private T value;
 

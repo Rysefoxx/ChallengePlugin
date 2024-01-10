@@ -2,6 +2,7 @@ package io.github.rysefoxx.challenge;
 
 import io.github.rysefoxx.core.ChallengePlugin;
 import io.github.rysefoxx.core.challenge.AbstractChallengeModule;
+import io.github.rysefoxx.core.challenge.ChallengeState;
 import io.github.rysefoxx.core.challenge.ChallengeType;
 import io.github.rysefoxx.core.service.IChallengeService;
 import org.bukkit.Bukkit;
@@ -82,6 +83,15 @@ public class SkeletonFollow extends AbstractChallengeModule implements Listener,
                 skeleton.teleport(location.add(location.getDirection().multiply(-2)));
             }
         }, 0L, 20L);
+    }
+
+    @Override
+    public void onStateChange(@NotNull ChallengeState state) {
+        if (state != ChallengeState.AFTER) return;
+        if (isEnabled()) return;
+
+        this.playerSkeleton.values().forEach(Entity::remove);
+        this.playerSkeleton.clear();
     }
 
     @EventHandler

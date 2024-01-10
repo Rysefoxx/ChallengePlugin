@@ -2,6 +2,7 @@ package io.github.rysefoxx.challenge;
 
 import io.github.rysefoxx.core.ChallengePlugin;
 import io.github.rysefoxx.core.challenge.AbstractChallengeModule;
+import io.github.rysefoxx.core.challenge.ChallengeState;
 import io.github.rysefoxx.core.challenge.ChallengeType;
 import io.github.rysefoxx.core.challenge.SettingModule;
 import io.github.rysefoxx.core.registry.ServiceRegistry;
@@ -15,7 +16,6 @@ import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -85,6 +85,14 @@ public class SpeedTen extends AbstractChallengeModule implements Listener, IChal
     public void onTimerStop() {
         Bukkit.getWorlds().forEach(world -> world.getLivingEntities()
                 .forEach(livingEntity -> livingEntity.removePotionEffect(PotionEffectType.SPEED)));
+    }
+
+    @Override
+    public void onStateChange(@NotNull ChallengeState state) {
+        if (state != ChallengeState.AFTER) return;
+        if (isEnabled()) return;
+
+        onTimerStop();
     }
 
     @Override

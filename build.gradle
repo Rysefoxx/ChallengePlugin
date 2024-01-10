@@ -64,6 +64,7 @@ dependencies {
     implementation project(':SingleUse')
     implementation project(':SummedDamage')
     implementation project(':SkeletonFollow')
+    implementation project(':WaterDamage')
 }
 
 shadowJar {

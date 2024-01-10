@@ -41,7 +41,8 @@
         "io.github.rysefoxx.challenge.NoExperience",
         "io.github.rysefoxx.challenge.SingleUse",
         "io.github.rysefoxx.challenge.SummedDamage",
-        "io.github.rysefoxx.challenge.SkeletonFollow"
+        "io.github.rysefoxx.challenge.SkeletonFollow",
+        "io.github.rysefoxx.challenge.WaterDamage"
       ]
     },
     {

@@ -133,6 +133,7 @@ public class ChallengeDataLoader implements IDatabaseService, IChallengeDataServ
                         SettingModule<?> setting = SettingModule.fromJson(settingJson);
                         challengeModule.addSetting(setting);
                         hasSettings = true;
+                        ChallengePlugin.logger().info("Loaded setting " + setting.getKey() + " for challenge " + challengeModule.getId());
                     }
                 }
 
@@ -153,6 +154,7 @@ public class ChallengeDataLoader implements IDatabaseService, IChallengeDataServ
         for (SettingModule<?> setting : defaultSettings) {
             challengeModule.addSetting(setting);
             saveSetting(challengeModule, setting);
+            ChallengePlugin.logger().info("Initialized default setting " + setting.getKey() + " for challenge " + challengeModule.getId());
         }
     }
 
