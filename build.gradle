@@ -65,6 +65,7 @@ dependencies {
     implementation project(':SummedDamage')
     implementation project(':SkeletonFollow')
     implementation project(':WaterDamage')
+    implementation project(':OnlyDirt')
 }
 
 shadowJar {
