@@ -66,6 +66,7 @@ dependencies {
     implementation project(':SkeletonFollow')
     implementation project(':WaterDamage')
     implementation project(':OnlyDirt')
+    implementation project(':NoVillagerTrade')
 }
 
 shadowJar {
